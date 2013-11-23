@@ -55,7 +55,7 @@ class CheckOut
     end
 
     def initialize(pricing_rules)
-        @rules = parse_rules(pricing_rules)
+        @rules = Hash[*(parse_rules(pricing_rules).map {|rule| [rule.name, rule]}.flatten(1))]
         @items = {}
         @items.default = 0
     end
@@ -65,7 +65,7 @@ class CheckOut
     end
 
     def total
-        @items.map {|item, count| @rules.find {|rule| rule.name == item}.price(count)}.inject(0, &:+)
+        @items.map {|item, count| @rules[item].price(count)}.inject(0, &:+)
     end
 
     private
