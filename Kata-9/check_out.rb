@@ -29,31 +29,43 @@ Here’s a set of unit tests for a Ruby implementation. The helper method price 
 
 class CheckOut
     class PricingRule
+        attr :name
+
         def initialize(pricing_rule)
             /^\s*(\w+)\s+(\d+)(?:\s+(.+))?$/ =~ pricing_rule
             @name = $1
             @unit_price = $2.to_i
-            @special_prices = Hash[*(($3 || '').split(/\s*,\s*/).map { |rule| /(\d+)\s*for\s*(\d+)/ =~ rule; [$1, $2] }.flatten(1))]
+            @special_prices = Hash[*(($3 || '').split(/\s*,\s*/).map { |rule| /(\d+)\s*for\s*(\d+)/ =~ rule; [$1.to_i, $2.to_i] }.flatten(1))]
+            @special_units = @special_prices.keys.sort {|a, b| b <=> a}
         end
 
         def to_s
-            [@name, @unit_price, @special_prices].to_s
+            inspect
         end
 
         def inspect
-            [@name, @unit_price, @special_prices].to_s
+            [@name, @unit_price, @special_prices, @special_units].to_s
         end
+
+        def price(count)
+            discounted = @special_units.find {|size| count >= size}
+            discounted.nil? ? @unit_price * count : @special_prices[discounted] + price(count - discounted)
+        end
+
     end
 
     def initialize(pricing_rules)
         @rules = parse_rules(pricing_rules)
-        p @rules
+        @items = {}
+        @items.default = 0
     end
 
     def scan(item)
+        @items[item] += 1
     end
 
     def total
+        @items.map {|item, count| @rules.find {|rule| rule.name == item}.price(count)}.inject(0, &:+)
     end
 
     private
