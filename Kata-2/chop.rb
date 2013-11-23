@@ -18,19 +18,5 @@ You can assume that the array has less than 100,000 elements. For the purposes o
 =end
 
 def chop(target, array)
-    found = -1
-    cursor = 0
-    finding = array
-    while (0 < finding.size && 0 > found)
-        pos = finding.size / 2
-        if target == finding[pos]
-            found = cursor + pos
-        elsif target < finding[pos]
-            finding = finding.take(pos)
-        else
-            finding.shift(pos + 1)
-            cursor += pos + 1
-        end
-    end
-    found
+    array.index(target) || -1
 end
