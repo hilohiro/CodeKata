@@ -1,6 +1,14 @@
 require 'test/unit'
+require 'check_out'
 
 class TestPrice < Test::Unit::TestCase
+
+    RULES = <<-__RULES_END__
+    A     50       3 for 130
+    B     30       2 for 45
+    C     20
+    D     15
+__RULES_END__
 
     def price(goods)
       co = CheckOut.new(RULES)
