@@ -40,11 +40,11 @@ class CheckOut
         end
 
         def to_s
-            inspect
+            inspect.to_s
         end
 
         def inspect
-            [@name, @unit_price, @special_prices, @special_units].to_s
+            [@name, @unit_price, @special_prices, @special_units]
         end
 
         def price(count)
@@ -57,6 +57,10 @@ class CheckOut
     def initialize(pricing_rules)
         @rules = Hash[*(parse_rules(pricing_rules).map {|rule| [rule.name, rule]}.flatten(1))]
         @items = Hash.new(0)
+    end
+
+    def inspect
+        @rules.values.map(&:inspect)
     end
 
     def scan(item)
