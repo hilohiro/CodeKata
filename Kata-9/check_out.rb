@@ -29,7 +29,7 @@ Here’s a set of unit tests for a Ruby implementation. The helper method price 
 
 class CheckOut
     class PricingRule
-        attr :name
+        attr_reader :name, :unit_price
 
         def initialize(pricing_rule)
             raise ArgumentError.new("There are neither item name nor unit price.") unless /^\s*(\w+)\s+(\d+)(?:\s+(.+))?$/ =~ pricing_rule
