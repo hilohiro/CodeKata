@@ -43,4 +43,10 @@ __RULES_END__
       co.scan("A");  assert_equal(160, co.total)
       co.scan("B");  assert_equal(175, co.total)
     end
+
+    def test_unknown
+      co = CheckOut.new(RULES)
+      assert_equal(  0, co.total)
+      assert_raise(ArgumentError) { co.scan("Z") }
+    end
 end

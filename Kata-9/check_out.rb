@@ -32,7 +32,7 @@ class CheckOut
         attr :name
 
         def initialize(pricing_rule)
-            /^\s*(\w+)\s+(\d+)(?:\s+(.+))?$/ =~ pricing_rule
+            raise ArgumentError.new("There are neither item name nor unit price.") unless /^\s*(\w+)\s+(\d+)(?:\s+(.+))?$/ =~ pricing_rule
             @name = $1
             @unit_price = $2.to_i
             @special_prices = Hash[*(($3 || '').split(/\s*,\s*/).map { |rule| /(\d+)\s*for\s*(\d+)/ =~ rule; [$1.to_i, $2.to_i] }.flatten(1))]
@@ -60,6 +60,7 @@ class CheckOut
     end
 
     def scan(item)
+        raise ArgumentError.new("There is no rule for item \"#{item}\".") unless @rules.has_key?(item)
         @items[item] += 1
     end
 
