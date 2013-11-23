@@ -47,9 +47,9 @@ class CheckOut
             [@name, @unit_price, @special_prices, @special_units]
         end
 
-        def price(count)
+        def calculate(count)
             discounted = @special_units.find {|size| count >= size}
-            discounted.nil? ? @unit_price * count : @special_prices[discounted] + price(count - discounted)
+            discounted.nil? ? @unit_price * count : @special_prices[discounted] + calculate(count - discounted)
         end
 
     end
@@ -69,7 +69,7 @@ class CheckOut
     end
 
     def total
-        @items.map {|item, count| @rules[item].price(count)}.inject(0, &:+)
+        @items.map {|item, count| @rules[item].calculate(count)}.inject(0, &:+)
     end
 
     private
