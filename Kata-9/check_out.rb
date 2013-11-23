@@ -28,12 +28,37 @@ Here’s a set of unit tests for a Ruby implementation. The helper method price 
 =end
 
 class CheckOut
+    class PricingRule
+        def initialize(pricing_rule)
+            /^\s*(\w+)\s+(\d+)(?:\s+(.+))?$/ =~ pricing_rule
+            @name = $1
+            @unit_price = $2.to_i
+            @special_prices = Hash[*(($3 || '').split(/\s*,\s*/).map { |rule| /(\d+)\s*for\s*(\d+)/ =~ rule; [$1, $2] }.flatten(1))]
+        end
+
+        def to_s
+            [@name, @unit_price, @special_prices].to_s
+        end
+
+        def inspect
+            [@name, @unit_price, @special_prices].to_s
+        end
+    end
+
     def initialize(pricing_rules)
+        @rules = parse_rules(pricing_rules)
+        p @rules
     end
 
     def scan(item)
     end
 
     def total
+    end
+
+    private
+
+    def parse_rules(pricing_rules)
+        pricing_rules.each_line.map { |rule| PricingRule.new(rule) }
     end
 end
