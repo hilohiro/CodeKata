@@ -26,9 +26,9 @@ def chop(target, array)
         if target == finding[pos]
             found = cursor + pos
         elsif target < finding[pos]
-            finding = finding[0...pos]
+            finding = finding.take(pos)
         else
-            finding = finding[(pos + 1)..-1]
+            finding.shift(pos + 1)
             cursor += pos + 1
         end
     end
