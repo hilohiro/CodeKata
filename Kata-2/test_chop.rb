@@ -1,3 +1,7 @@
+require 'test/unit'
+
+include Test::Unit::Assertions
+
 def test_chop
     assert_equal(-1, chop(3, []))
     assert_equal(-1, chop(3, [1]))

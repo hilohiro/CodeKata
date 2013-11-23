@@ -16,3 +16,21 @@ Write a binary chop method that takes an integer search target and a sorted arra
 
 You can assume that the array has less than 100,000 elements. For the purposes of this Kata, time and memory performance are not issues (assuming the chop terminates before you get bored and kill it, and that you have enough RAM to run it).
 =end
+
+def chop(target, array)
+    found = -1
+    cursor = 0
+    finding = array
+    while (0 < finding.size && 0 > found)
+        pos = finding.size / 2
+        if target == finding[pos]
+            found = cursor + pos
+        elsif target < finding[pos]
+            finding = finding[0...pos]
+        else
+            finding = finding[(pos + 1)..-1]
+            cursor += pos + 1
+        end
+    end
+    found
+end
