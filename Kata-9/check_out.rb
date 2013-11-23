@@ -56,8 +56,7 @@ class CheckOut
 
     def initialize(pricing_rules)
         @rules = Hash[*(parse_rules(pricing_rules).map {|rule| [rule.name, rule]}.flatten(1))]
-        @items = {}
-        @items.default = 0
+        @items = Hash.new(0)
     end
 
     def scan(item)
